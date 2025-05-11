@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+requests
+urllib3
+pycryptodome
+python-dotenv
+pydantic
+starlette
+python-multipart
