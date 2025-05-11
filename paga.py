@@ -4,7 +4,7 @@ import requests
 import urllib3
 from fastapi import FastAPI, Request, Response
 from pathlib import Path
-
+from starlette.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 
 urllib3.disable_warnings()
@@ -44,6 +44,29 @@ app = FastAPI()
 # 配置静态访问路径
 app.mount("/paga", StaticFiles(directory=PAGA_DIR), name="paga")
 
+# 添加根路径入口点，直接返回index.html内容
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    index_path = PAGA_DIR / "index.html"
+    with open(index_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    return content
+
+# 添加卡片页面入口点
+@app.get("/card", response_class=HTMLResponse)
+async def card_page():
+    card_path = PAGA_DIR / "card.html"
+    with open(card_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    return content
+
+# 添加充值页面入口点
+@app.get("/fundcard", response_class=HTMLResponse)  
+async def fund_card_page():
+    fund_path = PAGA_DIR / "fundCard.html"
+    with open(fund_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    return content
 
 # paga开美金卡
 @app.post("/api/paga/openUsdCard")
