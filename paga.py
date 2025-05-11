@@ -272,7 +272,7 @@ async def fundPagaCard(request: Request):
                 else:
                     logger.info(f' --- paga get user info fail --- {email} --- {response.content}')
 
-                    return Response(content="登录接口出错:" + response.text, status_code=response.status_code,
+                    return Response(content=response.text, status_code=response.status_code,
                                     headers=response.headers)
 
             params = concatenate_parameters(cardLastFourDigits, amount, externalSerialNumber, privateKey)
