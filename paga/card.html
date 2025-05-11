@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>paga强制开美元卡</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --secondary-color: #1abc9c;
+            --text-color: #2d3436;
+            --light-text: #636e72;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --error-color: #e74c3c;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 26px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .login-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 1.5px;
+        }
+
+        .notice-box {
+            background-color: rgba(52, 152, 219, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .warning-text {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .danger-text {
+            display: block;
+            font-size: 13px;
+            color: var(--error-color);
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .label-addon {
+            font-size: 12px;
+            color: var(--error-color);
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 14px 15px 14px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            background-color: #fff;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.25);
+        }
+
+        .login-button:active {
+            transform: translateY(-1px);
+        }
+
+        .login-button:disabled {
+            background: linear-gradient(90deg, #a8c7e8, #a1e0d1);
+            color: #ffffff;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Subtle pulse animation for button on hover */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+        
+        .login-button:hover {
+            animation: pulse 1.5s infinite;
+        }
+
+        .footer-text {
+            display: block;
+            font-size: 13px;
+            margin-top: 20px;
+            text-align: center;
+            color: var(--light-text);
+        }
+
+        .brand-text {
+            font-size: 11px;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        a.tg-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        a.tg-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        a.tg-link:hover {
+            color: var(--primary-hover);
+        }
+
+        a.tg-link:hover::after {
+            width: 100%;
+        }
+
+        a.tg-link:visited {
+            color: var(--primary-color);
+        }
+
+        /* Validation code special styling */
+        #divValidationCode {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #divValidationCode label {
+            color: var(--error-color);
+            display: flex;
+            align-items: center;
+        }
+
+        #divValidationCode label::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+
+            .form-group input, 
+            .form-group select {
+                padding: 10px 10px 10px 35px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>paga强制开美元卡</h2>
+        
+        <div class="notice-box">
+            <span class="warning-text">开卡前请确保卡至少有3600奈，并确保手机号已经换绑</span>
+            <span class="warning-text">能否成功看个人账号,地址错误就去app随便勾选地址,bvn错误就换号</span>
+            <span class="danger-text">本功能不记录账户信息,使用完可自行修改密码等,介意者勿用!!!</span>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">
+                    邮箱或手机号
+                    <span class="label-addon">如果邮箱登录提示用户名或密码错误，改用手机号</span>
+                </label>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="text" id="email" name="email" placeholder="输入邮箱或手机号" required/>
+                </div>
+            </div>
+
+            <div class="form-group" id="password-group">
+                <label for="password">密码</label>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="text" id="password" name="password" placeholder="输入密码" required/>
+                    <i class="fas fa-eye toggle-password" id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--light-text); cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div class="form-group" style="display: none" id="divValidationCode">
+                <label for="validationCode">新设备验证码</label>
+                <div class="input-group">
+                    <i class="fas fa-shield-alt input-icon"></i>
+                    <input type="text" id="validationCode" name="validationCode" placeholder="请填写验证码"/>
+                </div>
+            </div>
+
+            <button type="submit" class="login-button">
+                <span>开卡</span>
+            </button>
+
+            <span class="footer-text">
+                <span class="brand-text">fm出品</span> 更多功能持续开发中
+                (<a href="https://t.me/f_i_r_s_t_g_r_o_u_p" class="tg-link">进tg群</a>)
+            </span>
+        </form>
+    </div>
+
+    <script>
+        const divValidationCode = document.getElementById("divValidationCode");
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("password");
+        
+        // Password visibility toggle functionality
+        togglePassword.addEventListener("click", function() {
+            if (passwordField.type === "text") {
+                passwordField.type = "password";
+                togglePassword.classList.remove("fa-eye");
+                togglePassword.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "text";
+                togglePassword.classList.remove("fa-eye-slash");
+                togglePassword.classList.add("fa-eye");
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const loginButton = document.querySelector('.login-button');
+            loginButton.disabled = true;
+
+            // const authCode = document.getElementById('authCode').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            let validationCode = document.getElementById('validationCode').value;
+            if (validationCode == null || typeof validationCode === 'undefined') {
+                validationCode = ''
+            }
+
+            let data = {
+                // authCode,
+                email: email,
+                password: password,
+                validationCode: validationCode
+            }
+
+            fetch('/api/paga/openUsdCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.text())
+                .then(data => {
+                    try {
+                        let obj = JSON.parse(data)
+                        if (obj['responseCode'] === 1025) {
+                            divValidationCode.style.display = "block";
+                            alert(data + ' ---- 意思是：点击确定关闭弹框，然后界面输入邮箱验证码')
+                        } else {
+                            divValidationCode.style.display = "none";
+                            alert(data)
+                        }
+                    } catch (e) {
+                        if (data.includes('__cf_chl_f_tk')) {
+                            alert('触发cf的5秒盾,请刷新界面')
+                        } else {
+                            divValidationCode.style.display = "none";
+                            alert(data)
+                        }
+
+                    }
+                    // Handle successful login here
+                })
+                .catch((error) => {
+                    alert(JSON.stringify(error))
+                    // Handle errors here
+                }).finally(() => {
+                loginButton.disabled = false
+            });
+        });
+    </script>
+</body>
+</html>
