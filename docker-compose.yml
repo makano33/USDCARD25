@@ -8,7 +8,7 @@ services:
     container_name: paga-service
     ports:
       - "8000:8000"
-    restart: unless-stopped
+    restart: always
     volumes:
       # 將本地的paga目錄掛載至容器中，方便更新HTML檔案
       - ./paga:/app/paga
