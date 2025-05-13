@@ -27,6 +27,19 @@ pip install -r requirements.txt
 python paga.py
 ```
 
+## docker 部屬
+1. 克隆仓库
+```bash
+git clone https://github.com/FMPASS/paga.git
+cd paga
+```
+
+2. 透過docker-compose 部署
+```bash
+docker-compose up -d
+```
+
+
 应用将在 `http://localhost:8000` 启动
 
 ## 项目结构
