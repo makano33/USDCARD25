@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  paga-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paga-service
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      # 將本地的paga目錄掛載至容器中，方便更新HTML檔案
+      - ./paga:/app/paga
+    environment:
+      # 可以在這裡設定環境變數，如果將來需要從環境變數讀取配置
+      - TZ=Asia/Shanghai
