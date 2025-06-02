@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recargar Tarjeta Dólares - Paga Bank</title>
+    <title>paga充值美元卡</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -22,7 +22,11 @@
             --transition: all 0.3s ease;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             display: flex;
@@ -35,7 +39,7 @@
             color: var(--text-color);
         }
 
-        .container {
+        .login-container {
             background: rgba(255, 255, 255, 0.95);
             padding: 35px;
             border-radius: var(--border-radius);
@@ -45,30 +49,68 @@
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
-        .container::before {
+        .login-container::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 6px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
-        h1 {
+        .login-container h2 {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             font-size: 26px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
         }
 
-        .description {
-            text-align: center;
+        .login-container h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 1.5px;
+        }
+
+        .notice-box {
+            background-color: rgba(52, 152, 219, 0.05);
+            padding: 15px;
+            border-radius: 12px;
             margin-bottom: 25px;
-            color: var(--light-text);
-            line-height: 1.6;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .warning-text {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .danger-text {
+            display: block;
+            font-size: 13px;
+            color: var(--error-color);
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-weight: 600;
         }
 
         .form-group {
@@ -79,169 +121,374 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-color);
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
+        .label-addon {
+            font-size: 12px;
+            color: var(--error-color);
+            margin-left: 5px;
+            font-weight: bold;
         }
 
-        .form-group input:focus {
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 14px 15px 14px 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+            color: var(--text-color);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            background-color: #fff;
         }
 
-        .submit-btn {
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .login-button {
             width: 100%;
-            padding: 15px;
-            border: none;
+            padding: 14px;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 8px;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
             transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .submit-btn:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px);
+        .login-button:hover {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.25);
         }
 
-        .submit-btn:disabled {
-            background: #bdc3c7;
+        .login-button:active {
+            transform: translateY(-1px);
+        }
+
+        .login-button:disabled {
+            background: linear-gradient(90deg, #a8c7e8, #a1e0d1);
+            color: #ffffff;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Subtle pulse animation for button on hover */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+        
+        .login-button:hover {
+            animation: pulse 1.5s infinite;
         }
 
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid #fff;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .message-box {
+        .footer-text {
+            display: block;
+            font-size: 13px;
             margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
             text-align: center;
-            font-weight: 500;
+            color: var(--light-text);
         }
 
-        .message-box.success { background-color: #d4edda; color: #155724; }
-        .message-box.error { background-color: #f8d7da; color: #721c24; }
-
-        .back-link {
-            text-align: center;
-            margin-top: 25px;
+        .brand-text {
+            font-size: 11px;
+            color: var(--secondary-color);
+            font-weight: bold;
         }
 
-        .back-link a {
+        a.tg-link {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding-bottom: 2px;
         }
 
-        .back-link a:hover {
-            text-decoration: underline;
+        a.tg-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: var(--transition);
         }
 
-        .form-group i {
+        a.tg-link:hover {
+            color: var(--primary-hover);
+        }
+
+        a.tg-link:hover::after {
+            width: 100%;
+        }
+
+        /* Validation code special styling */
+        #divValidationCode {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #divValidationCode label {
+            color: var(--error-color);
+            display: flex;
+            align-items: center;
+        }
+
+        #divValidationCode label::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
             margin-right: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
+
+            .form-group input, 
+            .form-group select {
+                padding: 10px 10px 10px 35px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Recargar Tarjeta Dólares</h1>
-        <p class="description">
-            Ingresa la información de tu cuenta y el monto que deseas recargar.
-        </p>
-        <form id="fund-card-form">
-            <div class="form-group">
-                <label for="phone"><i class="fas fa-mobile-alt"></i>Número de Teléfono</label>
-                <input type="text" id="phone" name="phone" placeholder="Ingresa tu número de teléfono" required>
-            </div>
-            <div class="form-group">
-                <label for="password"><i class="fas fa-lock"></i>Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
-            </div>
-            <div class="form-group">
-                <label for="amount"><i class="fas fa-dollar-sign"></i>Monto a Recargar (USD)</label>
-                <input type="number" id="amount" name="amount" placeholder="Ej: 10.50" required min="1" step="0.01">
-            </div>
-            <button type="submit" class="submit-btn" id="submit-btn">
-                <span class="btn-text">Recargar Ahora</span>
-                <span class="spinner" style="display: none;"></span>
-            </button>
-        </form>
-        <div id="message" class="message-box" style="display: none;"></div>
-        <div class="back-link">
-            <a href="/"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
-        </div>
+<div class="login-container">
+    <h2>paga充值美元卡</h2>
+    
+    <div class="notice-box">
+        <span class="danger-text">本功能不记录账户信息,使用完可自行修改密码等,介意者勿用!!!</span>
     </div>
-    <script>
-        document.getElementById('fund-card-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-            const amount = document.getElementById('amount').value;
-            const messageDiv = document.getElementById('message');
-            const submitBtn = document.getElementById('submit-btn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const spinner = submitBtn.querySelector('.spinner');
 
-            messageDiv.style.display = 'none';
-            messageDiv.textContent = '';
-            submitBtn.disabled = true;
-            btnText.style.display = 'none';
-            spinner.style.display = 'inline-block';
+    <form id="login-form">
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <div class="input-group">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="email" name="email" placeholder="输入您的邮箱" required/>
+            </div>
+        </div>
 
-            fetch('/fundCard', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone, password, amount })
-            })
-            .then(response => response.json())
+        <div class="form-group" id="password-group">
+            <label for="password">密码</label>
+            <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="text" id="password" name="password" placeholder="输入密码" required/>
+                <i class="fas fa-eye toggle-password" id="togglePassword" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--light-text); cursor: pointer;"></i>
+            </div>
+        </div>
+
+        <div class="form-group" style="display: none" id="divValidationCode">
+            <label for="validationCode">新设备验证码</label>
+            <div class="input-group">
+                <i class="fas fa-shield-alt input-icon"></i>
+                <input type="text" id="validationCode" name="validationCode" placeholder="请填写验证码"/>
+            </div>
+        </div>
+
+        <div class="form-group" id="amount-group">
+            <label for="amount">充值金额(整数)</label>
+            <div class="input-group">
+                <i class="fas fa-dollar-sign input-icon"></i>
+                <input type="number" id="amount" name="amount" value="1" required/>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="login-type">
+                是否自动获取卡片信息
+                <span class="label-addon">登录接口不可用时，请选择手动填写</span>
+            </label>
+            <div class="input-group">
+                <i class="fas fa-cog input-icon"></i>
+                <select id="login-type" name="login-type" onchange="toggleLoginType()">
+                    <option value="no">否</option>
+                    <option value="yes">是</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group" id="cardLastFourDigits-group">
+            <label for="cardLastFourDigits">卡片后四位</label>
+            <div class="input-group">
+                <i class="fas fa-credit-card input-icon"></i>
+                <input type="text" id="cardLastFourDigits" name="cardLastFourDigits" placeholder="输入卡片后四位"/>
+            </div>
+        </div>
+
+        <div class="form-group" id="externalSerialNumber-group">
+            <label for="externalSerialNumber">卡片序列号</label>
+            <div class="input-group">
+                <i class="fas fa-fingerprint input-icon"></i>
+                <input type="text" id="externalSerialNumber" name="externalSerialNumber" placeholder="输入卡片序列号"/>
+            </div>
+        </div>
+
+        <button type="submit" class="login-button">充值</button>
+
+        <div class="footer-text">
+            <span class="brand-text">fm出品</span> 更多功能持续开发中
+            (<a href="https://t.me/f_i_r_s_t_g_r_o_u_p" class="tg-link">进tg群</a>)
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleLoginType() {
+        const loginType = document.getElementById('login-type').value;
+        const cardLastFourDigitsGroup = document.getElementById('cardLastFourDigits-group');
+        const externalSerialNumberGroup = document.getElementById('externalSerialNumber-group');
+
+        if (loginType === 'yes') {
+            cardLastFourDigitsGroup.style.display = 'none';
+            externalSerialNumberGroup.style.display = 'none';
+        } else {
+            cardLastFourDigitsGroup.style.display = 'block';
+            externalSerialNumberGroup.style.display = 'block';
+        }
+    }
+
+    const divValidationCode = document.getElementById("divValidationCode");
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordField = document.getElementById("password");
+    
+    // Password visibility toggle functionality
+    togglePassword.addEventListener("click", function() {
+        if (passwordField.type === "text") {
+            passwordField.type = "password";
+            togglePassword.classList.remove("fa-eye");
+            togglePassword.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "text";
+            togglePassword.classList.remove("fa-eye-slash");
+            togglePassword.classList.add("fa-eye");
+        }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const loginButton = document.querySelector('.login-button');
+        loginButton.disabled = true;
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const amount = document.getElementById('amount').value;
+        let cardLastFourDigits = document.getElementById('cardLastFourDigits').value;
+        let externalSerialNumber = document.getElementById('externalSerialNumber').value;
+        let validationCode = document.getElementById('validationCode').value;
+
+        if (validationCode == null || typeof validationCode === 'undefined') {
+            validationCode = ''
+        }
+        if (cardLastFourDigits == null || typeof cardLastFourDigits === 'undefined') {
+            cardLastFourDigits = ''
+        }
+        if (externalSerialNumber == null || typeof externalSerialNumber === 'undefined') {
+            externalSerialNumber = ''
+        }
+
+        const loginType = document.getElementById('login-type').value;
+        let is_auto_card = '0'
+        if (loginType === 'yes') {
+            is_auto_card = '1'
+        } else {
+            if (cardLastFourDigits.trim().length === 0) {
+                alert('cardLastFourDigits is empty!')
+                loginButton.disabled = false
+                return
+            } else if (externalSerialNumber.trim().length === 0) {
+                alert('externalSerialNumber is empty!')
+                loginButton.disabled = false
+                return
+            }
+        }
+
+        let data = {
+            email: email,
+            password: password,
+            validationCode: validationCode,
+            amount,
+            cardLastFourDigits,
+            externalSerialNumber,
+            is_auto_card
+        }
+
+        fetch('/api/paga/fundPagaCard', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.text())
             .then(data => {
-                messageDiv.textContent = data.message || JSON.stringify(data);
-                messageDiv.className = 'message-box';
-                if (data.status === 'success' || (data.message && data.message.includes('成功'))) {
-                    messageDiv.classList.add('success');
-                } else {
-                    messageDiv.classList.add('error');
+                try {
+                    let obj = JSON.parse(data)
+                    if (obj['responseCode'] === 1025) {
+                        divValidationCode.style.display = "block";
+                        alert(data + ' ---- 意思是：点击确定关闭弹框，然后界面输入邮箱验证码')
+                    } else {
+                        divValidationCode.style.display = "none";
+                        alert(data)
+                    }
+                } catch (e) {
+                    if (data.includes('__cf_chl_f_tk')) {
+                        alert('触发cf的5秒盾,请刷新界面')
+                    } else {
+                        divValidationCode.style.display = "none";
+                        alert(data)
+                    }
                 }
-                messageDiv.style.display = 'block';
             })
-            .catch(error => {
-                messageDiv.textContent = 'Ocurrió un error: ' + error.message;
-                messageDiv.className = 'message-box error';
-                messageDiv.style.display = 'block';
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                btnText.style.display = 'inline-block';
-                spinner.style.display = 'none';
+            .catch((error) => {
+                alert(JSON.stringify(error))
+            }).finally(() => {
+                loginButton.disabled = false
             });
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
